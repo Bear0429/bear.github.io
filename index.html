@@ -21,20 +21,25 @@
         .container {
             max-width: 1000px;
             margin: 0 auto;
+            text-align: center;
         }
 
-        /* 标题样式 */
+        /* 标题样式（和图片风格匹配） */
         .site-title {
-            text-align: center;
-            font-size: 42px;
-            color: #c50000;
+            font-size: 48px;
+            color: #b8b8b8;
             margin-bottom: 10px;
-            letter-spacing: 4px;
+            letter-spacing: 6px;
+            /* 金属质感 */
+            background: linear-gradient(180deg, #e0e0e0 0%, #707070 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 8px rgba(255,255,255,0.15);
         }
 
         .sub-title {
-            text-align: center;
-            color: #999;
+            color: #666;
             font-size: 16px;
             margin-bottom: 40px;
         }
@@ -46,6 +51,7 @@
             margin: 30px 0 15px;
             padding-bottom: 5px;
             border-bottom: 1px solid #444;
+            text-align: left;
         }
 
         /* 档案列表 */
@@ -54,18 +60,21 @@
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 10px;
             margin-bottom: 20px;
+            text-align: left;
         }
 
         .archive-item {
             background: #1a1a1a;
             padding: 8px 12px;
-            border-left: 3px solid #c50000;
+            border-left: 3px solid #888;
             transition: 0.2s;
+            cursor: pointer;
         }
 
         .archive-item:hover {
             background: #292929;
             padding-left: 16px;
+            border-left-color: #c50000;
         }
 
         .archive-item a {
@@ -84,6 +93,135 @@
             margin: 20px 0;
             border: 1px solid #333;
             color: #bbb;
+            text-align: left;
+        }
+
+        /* 音频控制 */
+        .audio-control {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background: #222;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #444;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        /* 登录弹窗样式 */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: #1a1a1a;
+            width: 360px;
+            padding: 30px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .login-box h3 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            background: #222;
+            border: 1px solid #555;
+            color: #fff;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #c50000;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .login-box .close-btn {
+            background: #444;
+            margin-top: 6px;
+        }
+
+        /* 轮回者手册 弹窗 */
+        .rule-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 999;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .rule-box {
+            background: #121212;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 40px;
+            border: 1px solid #555;
+            border-radius: 8px;
+            color: #ddd;
+            line-height: 1.8;
+            text-align: left;
+        }
+
+        .rule-box h2 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .rule-box p {
+            margin: 10px 0;
+        }
+
+        .rule-box h3 {
+            color: #fff;
+            margin: 20px 0 10px;
+            font-size: 18px;
+            border-left: 3px solid #c50000;
+            padding-left: 10px;
+        }
+
+        .red-text {
+            color: #ff4444;
+            font-weight: bold;
+        }
+
+        .close-rule {
+            background: #c50000;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -103,7 +241,7 @@
         <div class="archive-list">
             <div class="archive-item"><a href="#">罪城管理中心</a></div>
             <div class="archive-item"><a href="#">空间规则总集</a></div>
-            <div class="archive-item"><a href="#">轮回者手册</a></div>
+            <div class="archive-item" onclick="showRule()">轮回者手册</div> <!-- 点击弹出 -->
             <div class="archive-item"><a href="#">已破解罪域</a></div>
             <div class="archive-item"><a href="#">封禁绝密档案</a></div>
         </div>
@@ -111,7 +249,7 @@
         <!-- 001 - 099 系列 -->
         <h2 class="module-title">罪城空间档案 001 - 099</h2>
         <div class="archive-list">
-            <div class="archive-item"><a href="#">ZCT-001 初始空间【权限锁定】</a></div>
+            <div class="archive-item" onclick="showLogin()">ZCT-001 初始空间【权限锁定】</div>
             <div class="archive-item"><a href="#">ZCT-002 锈蚀公寓</a></div>
             <div class="archive-item"><a href="#">ZCT-003 寄生母体</a></div>
             <div class="archive-item"><a href="#">ZCT-004 猩红电梯</a></div>
@@ -148,8 +286,102 @@
             <div class="archive-item"><a href="#">废弃罪域</a></div>
             <div class="archive-item"><a href="#">认知危害档案</a></div>
             <div class="archive-item"><a href="#">轮回者日志</a></div>
-            <div class="archive-item"><a href="#">罪城故事线</a></div>
+            <div class="archive-item"><a href="#">后记</a></div>
         </div>
     </div>
+
+    <!-- 登录弹窗 -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-box">
+            <h3>权限验证 · 轮回者登录</h3>
+            <input id="account" type="text" placeholder="轮回者编号">
+            <input id="pwd" type="password" placeholder="安全密钥">
+            <button onclick="checkLogin()">验证权限</button>
+            <button class="close-btn" onclick="closeLogin()">取消</button>
+        </div>
+    </div>
+
+    <!-- 轮回者手册 弹窗 -->
+    <div class="rule-modal" id="ruleModal">
+        <div class="rule-box">
+            <h2>【罪城空间 · 轮回者通用公约】</h2>
+            <p>档案等级：公开档案 | 适配人员：新晋/正式轮回者 | 生效日期：全域永久执行</p>
+            <p>欢迎加入罪城，这片被罪孽与迷雾笼罩的异常轮回空间。所有被空间选中的参与者，统称为【轮回者】。凡接入罪城空间、进入任意罪域副本之人，默认自愿遵守以下全部公约，违背规则者，空间将予以抹杀、封禁、剥夺轮回资格等一切处罚。</p>
+
+            <h3>第一章：基础准入条例</h3>
+            <p>1、罪城全域副本分为：初始隔离区、初级罪域、中级罪域、高危禁区、绝密封禁区五大板块。除初始隔离区外，其余所有副本均需要权限验证后方可进入。</p>
+            <p>2、每位新晋轮回者仅拥有一次初始注册机会，注册账号与安全密钥唯一绑定个人灵魂印记，禁止转借、交易、赠予他人，一经发现，直接<span class="red-text">永久抹除</span>轮回权限。</p>
+            <p>3、初始隔离区（ZCT-001）为罪城一切轮回者的起源之地，该区域长期权限锁定，仅对持有专属注册信息的新晋人员开放，无权限者禁止私自破译接口。</p>
+
+            <h3>第二章：权限注册公约</h3>
+            <p>1、罪城空间诞生于2076年，空间首次对外开放注册的时间为当年元月一日。所有新晋轮回者的基础编号，统一以空间诞生与首发日期作为基底编制。</p>
+            <p>2、权限登录分为双重验证：轮回者编号（纯6位数字）+ 专属安全密钥（字母+数字组合），两项信息缺一不可，连续三次输入错误，IP地址永久封禁。</p>
+            <p>3、空间管理员不会主动向轮回者下发注册信息，所有账号与密钥，均隐藏于本公约条例之内，这是新晋轮回者进入初始区域的第一道试炼。</p>
+
+            <h3>第三章：副本生存法则</h3>
+            <p>1、罪城之内，众生皆为罪人（Sinner）。初始试炼面向01批次新人开放，密钥由身份代名词+批次编号组成，无任何多余符号。</p>
+            <p>2、所有轮回者在副本内禁止私藏超限异常物品、禁止篡改罪域底层规则、禁止勾结副本实体怪物。违规者将会被投入废弃罪域，无限循环死亡惩罚。</p>
+            <p>3、通关初级罪域副本后，轮回者可兑换积分、道具、权限等级；积分可解锁专属道具、购买副本生存提示。</p>
+
+            <h3>第四章：补充条例</h3>
+            <p class="red-text">本公约最终解释权归罪城空间中枢所有，空间有权随时修改、增补规则内容，轮回者需定期查阅本档案。</p>
+
+            <button class="close-rule" onclick="closeRule()">关闭手册</button>
+        </div>
+    </div>
+
+    <!-- 恐怖背景音乐 -->
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_dc3d64d8d8.mp3?filename=horror-atmosphere-130777.mp3" type="audio/mpeg">
+        你的浏览器不支持音频播放
+    </audio>
+
+    <div class="audio-control">
+        <button onclick="toggleMusic()">播放/暂停背景音乐</button>
+    </div>
+
+    <script>
+        // 音乐控制
+        const bgMusic = document.getElementById('bgMusic');
+        bgMusic.volume = 0.3;
+
+        function toggleMusic() {
+            bgMusic.paused ? bgMusic.play() : bgMusic.pause();
+        }
+
+        document.addEventListener('click', () => {
+            if (bgMusic.paused) bgMusic.play();
+        }, { once: true });
+
+        // 登录弹窗
+        function showLogin() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+        function closeLogin() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        // 登录验证逻辑
+        function checkLogin() {
+            const account = document.getElementById('account').value;
+            const pwd = document.getElementById('pwd').value;
+            
+            // 正确账号密码
+            if(account === '207601' && pwd === 'Sinner01'){
+                alert('【欢迎玩家01光临罪城】');
+                closeLogin();
+            }else{
+                alert('新注册用户记得阅读新手手册哟~');
+            }
+        }
+
+        // 轮回者手册弹窗
+        function showRule() {
+            document.getElementById('ruleModal').style.display = 'block';
+        }
+        function closeRule() {
+            document.getElementById('ruleModal').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
